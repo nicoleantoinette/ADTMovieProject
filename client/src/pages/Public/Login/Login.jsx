@@ -1,131 +1,134 @@
-import { useState, useRef, useCallback, useEffect } from "react";
-import "../../../styles/pages/Login.css";
+import { useState, useRef, useEffect } from "react";
+import "./Login.css";
 import { useNavigate } from "react-router-dom";
 import { useDebounce } from "../../../utils/hooks/useDebounce";
 import axios from "axios";
-import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa"; // Importing icons
+import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isFieldsDirty, setIsFieldsDirty] = useState(false);
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  const [isShowPassword, setIsShowPassword] = useState(false);
-  const [debounceState, setDebounceState] = useState(false);
-  const [status, setStatus] = useState("idle");
-  const navigate = useNavigate();
+  const [userEmail, setUserEmail] = useState("");
+  const [userPassword, setUserPassword] = useState("");
+  const [isFormDirty, setIsFormDirty] = useState(false);
+  const emailInputRef = useRef();
+  const passwordInputRef = useRef();
+  const [showPassword, setShowPassword] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [loadingState, setLoadingState] = useState("idle");
+  const navigateTo = useNavigate();
 
-  const userInputDebounce = useDebounce({ email, password }, 2000);
+  const debouncedUserInput = useDebounce({ userEmail, userPassword }, 2000);
 
-  const toggleShowPassword = useCallback(() => {
-    setIsShowPassword((prev) => !prev);
-  }, []);
-
-  const handleChange = (event, type) => {
-    setDebounceState(false);
-    setIsFieldsDirty(true);
-    type === "email"
-      ? setEmail(event.target.value)
-      : setPassword(event.target.value);
+  const togglePasswordVisibility = () => {
+    setShowPassword((currentState) => !currentState);
   };
 
-  const handleLogin = async () => {
-    const data = { email, password };
-    setStatus("loading");
+  const handleInputChange = (event, inputType) => {
+    setIsTyping(false);
+    setIsFormDirty(true);
+    if (inputType === "email") {
+      setUserEmail(event.target.value);
+    } else {
+      setUserPassword(event.target.value);
+    }
+  };
+
+  const loginUser = async () => {
+    const requestData = { email: userEmail, password: userPassword };
+    setLoadingState("loading");
 
     try {
-      const res = await axios.post("/user/login", data, {
+      const response = await axios.post("/user/login", requestData, {
         headers: { "Access-Control-Allow-Origin": "*" },
       });
-      localStorage.setItem("accessToken", res.data.access_token);
+      localStorage.setItem("accessToken", response.data.access_token);
       setTimeout(() => {
-        setStatus("idle");
-        navigate("/home");
+        setLoadingState("idle");
+        navigateTo("/home");
       }, 3000);
-    } catch (e) {
+    } catch (error) {
       setTimeout(() => {
-        setStatus("idle");
-        const errorMessage =
-          e.response?.status === 401
-            ? "Invalid email or password. Please try again."
-            : "Something went wrong.";
-        alert(errorMessage);
+        setLoadingState("idle");
+        const errorText =
+          error.response?.status === 401
+            ? "Invalid credentials. Try again."
+            : "An error occurred. Please try again.";
+        alert(errorText);
       }, 3000);
     }
   };
 
   useEffect(() => {
-    setDebounceState(true);
-  }, [userInputDebounce]);
+    setIsTyping(true);
+  }, [debouncedUserInput]);
 
   return (
-    <div className="login-page">
-      <div className="main-container">
-        <h3>Sign In</h3>
+    <div className="auth-page">
+      <div className="auth-container">
+        <h3>Please sign in for better experience</h3>
         <form>
-          <div className="form-container">
-            <div className="form-group">
-              <label>E-mail:</label>
-              <div className="input-with-icon">
+          <div className="form-section">
+            <div className="input-group">
+              <label>Email Address</label>
+              <div className="input-wrapper">
                 <input
-                  icon={<FaEnvelope style={{ color: "#00796b" }} />}
                   type="text"
-                  ref={emailRef}
-                  onChange={(e) => handleChange(e, "email")}
-                  placeholder="Enter your email"
+                  ref={emailInputRef}
+                  onChange={(e) => handleInputChange(e, "email")}
+                  placeholder="Your email here"
                 />
               </div>
-              {debounceState && isFieldsDirty && !email && (
-                <span className="errors">This field is required</span>
+              {isTyping && isFormDirty && !userEmail && (
+                <span className="error-message">Email is required</span>
               )}
             </div>
 
-            <div className="form-group">
-              <label>Password:</label>
-              <div className="input-with-icon">
+            <div className="input-group">
+              <label>Password</label>
+              <div className="input-wrapper">
                 <input
-                  icon={<FaLock style={{ color: "#00796b" }} />}
-                  type={isShowPassword ? "text" : "password"}
-                  ref={passwordRef}
-                  onChange={(e) => handleChange(e, "password")}
-                  placeholder="Enter your password"
+                  type={showPassword ? "text" : "password"}
+                  ref={passwordInputRef}
+                  onChange={(e) => handleInputChange(e, "password")}
+                  placeholder="Your password here"
                 />
-                <span className="eye-icon" onClick={toggleShowPassword}>
-                  {isShowPassword ? <FaEyeSlash /> : <FaEye />}
+                <span
+                  className="toggle-password"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </span>
               </div>
-              {debounceState && isFieldsDirty && !password && (
-                <span className="errors">This field is required</span>
+              {isTyping && isFormDirty && !userPassword && (
+                <span className="error-message">Password is required</span>
               )}
             </div>
-            <div className="submit-container">
+
+            <div className="action-section">
               <button
-                className="btn-primary"
                 type="button"
-                disabled={status === "loading"}
+                disabled={loadingState === "loading"}
                 onClick={() => {
-                  if (email && password) {
-                    setStatus("loading");
-                    handleLogin();
+                  if (userEmail && userPassword) {
+                    setLoadingState("loading");
+                    loginUser();
                   } else {
-                    setIsFieldsDirty(true);
-                    email === "" && emailRef.current.focus();
-                    password === "" && passwordRef.current.focus();
+                    setIsFormDirty(true);
+                    if (!userEmail) emailInputRef.current.focus();
+                    if (!userPassword) passwordInputRef.current.focus();
                   }
                 }}
               >
-                {status === "loading" ? (
-                  <div className="loading-spinner"></div>
+                {loadingState === "loading" ? (
+                  <div className="spinner"></div>
                 ) : (
-                  "Login"
+                  "Sign In"
                 )}
               </button>
             </div>
-            <div className="register-container">
-              <small>Don't have an account? </small>
+            <div className="register-link">
+              <span>Don't have an account? </span>
               <a href="/register">
-                <small>Sign Up</small>
+                <small>Register</small>
               </a>
             </div>
           </div>
