@@ -149,7 +149,6 @@ button:hover:enabled {
 .register-link a:hover {
   text-decoration: underline;
 }
-
 @keyframes fadeIn {
   from {
     opacity: 0;
