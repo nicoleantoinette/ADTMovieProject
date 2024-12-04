@@ -9,7 +9,6 @@ const Home = () => {
   const navigate = useNavigate();
   const [featuredMovie, setFeaturedMovie] = useState(null);
   const { movieList, setMovieList, setMovie } = useMovieContext();
-
   const getMovies = () => {
     axios
       .get("/movies")
