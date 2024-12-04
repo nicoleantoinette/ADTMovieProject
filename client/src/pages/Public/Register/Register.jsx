@@ -4,161 +4,164 @@ import "../../../styles/pages/Register.css";
 import axios from "axios";
 
 function Register() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    firstName: "",
-    lastName: "",
-    middleName: "",
-    contactNo: "",
-    role: "user", // Default role
+  const [userData, setUserData] = useState({
+    userEmail: "",
+    userPassword: "",
+    userFirstName: "",
+    userLastName: "",
+    userMiddleName: "",
+    userPhoneNumber: "",
+    userRole: "guest", // Default role
   });
 
-  const [status, setStatus] = useState("idle");
-  const [isFieldsDirty, setIsFieldsDirty] = useState(false);
-  const navigate = useNavigate();
+  const [formStatus, setFormStatus] = useState("idle");
+  const [isFormDirty, setIsFormDirty] = useState(false);
+  const navigateTo = useNavigate();
 
-  const handleOnChange = (event) => {
-    setIsFieldsDirty(true);
+  const handleInputChange = (event) => {
+    setIsFormDirty(true);
     const { name, value } = event.target;
-    setFormData((prevState) => ({
-      ...prevState,
+    setUserData((prevData) => ({
+      ...prevData,
       [name]: value,
     }));
   };
 
-  const handleRegister = async () => {
-    if (Object.values(formData).every((value) => value.trim() !== "")) {
-      setStatus("loading");
-
+  const submitRegistration = async () => {
+    if (isFormComplete()) {
+      setFormStatus("loading");
       try {
-        await axios.post("/user/register", formData, {
+        await axios.post("/user/register", userData, {
           headers: { "Content-Type": "application/json" },
         });
 
-        alert("User registered successfully");
+        alert("Account created successfully");
 
         setTimeout(async () => {
           try {
-            const res = await axios.post("/user/login", {
-              email: formData.email,
-              password: formData.password,
+            const response = await axios.post("/user/login", {
+              email: userData.userEmail,
+              password: userData.userPassword,
             });
-            localStorage.setItem("accessToken", res.data.access_token);
-            navigate("/home");
-          } catch (e) {
-            alert("Failed to log in after registration");
-            console.log(e);
+            localStorage.setItem("accessToken", response.data.access_token);
+            navigateTo("/dashboard");
+          } catch (error) {
+            alert("Login failed after registration");
+            console.error(error);
           } finally {
-            setStatus("idle");
+            setFormStatus("idle");
           }
-        }, 3000);
+        }, 2000);
       } catch (error) {
-        alert("Failed to register");
-        console.log(error);
-        setStatus("idle");
+        alert("Registration failed");
+        console.error(error);
+        setFormStatus("idle");
       }
     } else {
-      setIsFieldsDirty(true);
-      alert("All fields are required!");
+      setIsFormDirty(true);
+      alert("All fields must be filled!");
     }
   };
 
+  const isFormComplete = () => {
+    return Object.values(userData).every((field) => field.trim() !== "");
+  };
+
   return (
-    <div className="container-register">
-      <div className="main-container">
-        <h3 className="register-title">Create Your Account</h3>
+    <div className="sign-up-container">
+      <div className="form-wrapper">
+        <h3 className="form-heading">Create Your New Account</h3>
         <form>
-          <div className="form-container">
-            <div className="form-group">
-              <label>Email</label>
+          <div className="form-elements">
+            <div className="input-group">
+              <label>Email Address</label>
               <input
                 type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleOnChange}
+                name="userEmail"
+                value={userData.userEmail}
+                onChange={handleInputChange}
                 placeholder="Enter your email"
                 required
               />
             </div>
 
-            <div className="form-group">
+            <div className="input-group">
               <label>Password</label>
               <input
                 type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleOnChange}
+                name="userPassword"
+                value={userData.userPassword}
+                onChange={handleInputChange}
                 placeholder="Enter your password"
                 required
               />
             </div>
 
-            <div className="form-group">
+            <div className="input-group">
               <label>First Name</label>
               <input
                 type="text"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleOnChange}
+                name="userFirstName"
+                value={userData.userFirstName}
+                onChange={handleInputChange}
                 placeholder="Enter your first name"
                 required
               />
             </div>
 
-            <div className="form-group">
+            <div className="input-group">
               <label>Last Name</label>
               <input
                 type="text"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleOnChange}
+                name="userLastName"
+                value={userData.userLastName}
+                onChange={handleInputChange}
                 placeholder="Enter your last name"
                 required
               />
             </div>
 
-            <div className="form-group">
+            <div className="input-group">
               <label>Middle Name</label>
               <input
                 type="text"
-                name="middleName"
-                value={formData.middleName}
-                onChange={handleOnChange}
+                name="userMiddleName"
+                value={userData.userMiddleName}
+                onChange={handleInputChange}
                 placeholder="Enter your middle name (optional)"
               />
             </div>
 
-            <div className="form-group">
-              <label>Contact Number</label>
+            <div className="input-group">
+              <label>Phone Number</label>
               <input
                 type="text"
-                name="contactNo"
-                value={formData.contactNo}
-                onChange={handleOnChange}
-                placeholder="Enter your contact number"
+                name="userPhoneNumber"
+                value={userData.userPhoneNumber}
+                onChange={handleInputChange}
+                placeholder="Enter your phone number"
                 required
               />
             </div>
 
-            <div className="submit-container">
+            <div className="action-container">
               <button
-                className="btn-register"
+                className="submit-button"
                 type="button"
-                onClick={handleRegister}
-                disabled={status === "loading"}
+                onClick={submitRegistration}
+                disabled={formStatus === "loading"}
               >
-                {status === "loading" ? (
-                  <div className="loading-spinner"></div>
+                {formStatus === "loading" ? (
+                  <div className="spinner"></div>
                 ) : (
-                  "Register"
+                  "Register Now"
                 )}
               </button>
             </div>
 
-            <div className="login-link">
+            <div className="login-prompt">
               <span>Already have an account?</span>
-              <a href="/login">Sign In</a>
+              <a href="/login">Log In</a>
             </div>
           </div>
         </form>
