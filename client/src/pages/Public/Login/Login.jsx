@@ -31,7 +31,6 @@ function Login() {
       setUserPassword(event.target.value);
     }
   };
-
   const loginUser = async () => {
     const requestData = { email: userEmail, password: userPassword };
     setLoadingState("loading");
