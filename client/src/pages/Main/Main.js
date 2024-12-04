@@ -5,26 +5,28 @@ import "./Main.css";
 function Main() {
   const accessToken = localStorage.getItem("accessToken");
   const navigate = useNavigate();
-
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = () => {
     const confirmLogout = window.confirm("Are you sure you want to logout?");
     if (confirmLogout) {
-      setIsLoggingOut(true); // Show loading spinner
+      setIsLoggingOut(true);
       setTimeout(() => {
         localStorage.removeItem("accessToken");
-        setIsLoggingOut(false); // Hide loading spinner
-        navigate("/login"); // Redirect to login page after logout
-      }, 3000); // 3-second delay before navigating
+        setIsLoggingOut(false);
+        navigate("/login");
+      }, 3000);
     }
   };
-
   useEffect(() => {
-    if (!accessToken) {
-      navigate("/login"); // Redirect to login if no access token
+    if (
+      accessToken === undefined ||
+      accessToken === "" ||
+      accessToken === null
+    ) {
+      handleLogout();
     }
-  }, [accessToken, navigate]);
+  }, []);
 
   return (
     <div className="main">
@@ -32,7 +34,7 @@ function Main() {
         <div className="navigation">
           <ul>
             <li>
-              <a onClick={() => navigate("/home")}>Home</a>
+              <a onClick={() => navigate("/")}>Movies</a>
             </li>
             {accessToken ? (
               <li className="logout" onClick={handleLogout}>
