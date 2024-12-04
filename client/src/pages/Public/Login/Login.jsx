@@ -56,11 +56,9 @@ function Login() {
       }, 3000);
     }
   };
-
   useEffect(() => {
     setIsTyping(true);
   }, [debouncedUserInput]);
-
   return (
     <div className="auth-page">
       <div className="auth-container">

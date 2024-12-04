@@ -160,7 +160,6 @@ button:hover:enabled {
     transform: translateY(0);
   }
 }
-
 @keyframes spin {
   from {
     transform: rotate(0deg);
