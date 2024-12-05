@@ -43,7 +43,6 @@
     rgba(0, 0, 0, 0.6),
     rgba(0, 0, 0, 0.8)
   );
-  animation: scaleIn 1s ease-in-out, slideUp 0.8s ease-out forwards;
 }
 
 .featured-movie-backdrop {
@@ -58,58 +57,35 @@
   background-position: center;
   color: var(--text-color);
   font-size: 1.5rem;
-  position: relative;
-  animation: zoomIn 1.2s ease-in-out;
-}
-
-.featured-movie-name {
   position: absolute;
-  top: 420px;
-  left: 20px;
-  background-color: rgba(230, 57, 70, 0.85);
-  padding: 12px;
-  border-radius: 5px;
-  font-size: 1.2rem;
+  opacity: 1;
+  animation: swipeRight 1s ease-in-out;
+}
+
+@keyframes swipeRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.featured-movie-title {
+  font-family: "Arial", sans-serif;
+  font-size: 2.5rem;
   font-weight: bold;
-  color: var(--text-color);
-  animation: slideIn 1s ease-out;
-}
-
-.movie-list-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  width: 100%;
-  margin: 0 auto;
-  animation: gridReveal 1.2s ease-in-out;
-}
-
-.MovieCards {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 300px;
-  background: linear-gradient(to right, #af1740, #740938);
-  border-radius: 8px;
-  color: var(--text-color);
-  font-size: 1.2rem;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-  cursor: pointer;
-  animation: cardPop 0.5s ease-out;
-}
-
-.MovieCards:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
-  background: linear-gradient(
-    to right,
-    rgba(230, 57, 70, 0.85),
-    rgba(115, 9, 56, 0.85)
-  );
-  animation: hoverPulse 0.5s infinite alternate;
+  color: #fff;
+  background-color: black;
+  padding: 10px 20px;
+  border-radius: 5px;
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+  z-index: 2;
+  transition: all 0.3s ease-in-out;
 }
 
 .featured-movie-loader {
@@ -122,85 +98,19 @@
   animation: spin 1s linear infinite;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    transform: scale(0.9);
-    opacity: 0.8;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes zoomIn {
-  from {
-    transform: scale(1.1);
-    opacity: 0.9;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(-50px);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(100px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes cardPop {
-  from {
-    transform: scale(0.95);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes hoverPulse {
-  from {
-    transform: scale(1);
-  }
-  to {
-    transform: scale(1.05);
-  }
-}
-
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
+}
+
+.movie-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  width: 100%;
+  margin: 0 auto;
+  animation: gridReveal 1.2s ease-in-out;
 }
 
 @keyframes gridReveal {
@@ -218,25 +128,20 @@
   .home-title {
     font-size: 2rem;
   }
-
+  .featured-movie-title {
+    font-size: 2rem;
+  }
   .featured-movie-container {
     height: 350px;
-  }
-
-  .featured-movie-name {
-    font-size: 1rem;
-    top: 300px;
-    left: 10px;
-  }
-
-  .MovieCards {
-    height: 250px;
   }
 }
 
 @media (max-width: 480px) {
   .home-title {
     font-size: 1.8rem;
+  }
+  .featured-movie-title {
+    font-size: 1.6rem;
   }
 
   .movie-list-grid {

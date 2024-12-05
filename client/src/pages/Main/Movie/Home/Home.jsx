@@ -8,7 +8,9 @@ import { useMovieContext } from "../../../../context/MovieContext";
 const Home = () => {
   const navigate = useNavigate();
   const [featuredMovie, setFeaturedMovie] = useState(null);
+  const [animationKey, setAnimationKey] = useState(0);
   const { movieList, setMovieList, setMovie } = useMovieContext();
+
   const getMovies = () => {
     axios
       .get("/movies")
@@ -29,6 +31,7 @@ const Home = () => {
       if (movieList.length) {
         const random = Math.floor(Math.random() * movieList.length);
         setFeaturedMovie(movieList[random]);
+        setAnimationKey((prev) => prev + 1);
       }
     }, 5000);
     return () => clearInterval(interval);
@@ -39,6 +42,7 @@ const Home = () => {
       {featuredMovie && movieList.length ? (
         <div className="featured-movie-container">
           <div
+            key={animationKey}
             className="featured-movie-backdrop"
             style={{
               background: `url(${
