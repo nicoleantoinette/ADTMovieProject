@@ -1,12 +1,16 @@
-import logo from "./logo.svg";
-import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Main from "./pages/Main/Main";
 import Home from "./pages/Main/Movie/Home/Home";
 import MovieContextProvider from "./context/MovieContext";
+import { AuthProvider } from "./context/AuthContext"; // Import AuthProvider
 import View from "./pages/Main/Movie/View/View";
 import Login from "./pages/Public/Login/Login";
 import Register from "./pages/Public/Register/Register";
+import List from "./pages/Main/Movie/Lists/Lists";
+import Form from "./pages/Main/Movie/Form/Form";
+import Photos from "./pages/Main/Movie/Photos/Photo-Form";
+import Videos from "./pages/Main/Movie/Videos/Video-Form";
+import Dashboard from "./pages/Main/Dashboard/Dashboard";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +37,27 @@ const router = createBrowserRouter([
         path: "/view/:movieId?",
         element: <View />,
       },
+      // Admin routes
+      {
+        path: "/admin/list",
+        element: <List />,
+      },
+      {
+        path: "/main/dashboard",
+        element: <Dashboard />,
+      },
+      {
+        path: "/admin/form",
+        element: <Form />,
+      },
+      {
+        path: "/admin/photos",
+        element: <Photos />,
+      },
+      {
+        path: "/admin/videos",
+        element: <Videos />,
+      },
     ],
   },
 ]);
@@ -40,9 +65,14 @@ const router = createBrowserRouter([
 function App() {
   return (
     <div className="App">
-      <MovieContextProvider>
-        <RouterProvider router={router} />
-      </MovieContextProvider>
+      {/* Wrap the RouterProvider with both MovieContextProvider and AuthProvider */}
+      <AuthProvider>
+        {" "}
+        {/* Add AuthProvider here */}
+        <MovieContextProvider>
+          <RouterProvider router={router} />
+        </MovieContextProvider>
+      </AuthProvider>
     </div>
   );
 }
