@@ -30,9 +30,9 @@ function View() {
         setCurrentPhotoIndex((prevIndex) =>
           prevIndex === movie.photos.length - 1 ? 0 : prevIndex + 1
         );
-      }, 3000); // Change photo every 3 seconds
+      }, 3000);
 
-      return () => clearInterval(photoInterval); // Clean up the interval when component unmounts
+      return () => clearInterval(photoInterval);
     }
   }, [movie]);
 
