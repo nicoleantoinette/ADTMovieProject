@@ -11,6 +11,8 @@ import Form from "./pages/Main/Movie/Form/Form";
 import Photos from "./pages/Main/Movie/Photos/Photo-Form";
 import Videos from "./pages/Main/Movie/Videos/Video-Form";
 import Dashboard from "./pages/Main/Dashboard/Dashboard";
+import Movies from "./pages/Main/Movie/Movie";
+import Movie from "./pages/Main/Movie/Movie";
 
 const router = createBrowserRouter([
   {
@@ -26,37 +28,41 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: "/",
+    path: "/main",
     element: <Main />,
     children: [
       {
-        path: "/home",
+        path: "home",
         element: <Home />,
       },
       {
-        path: "/view/:movieId?",
+        path: "view/:movieId?",
         element: <View />,
       },
-      // Admin routes
+
       {
-        path: "/admin/list",
+        path: "/list",
         element: <List />,
       },
       {
-        path: "/main/dashboard",
+        path: "/dashboard",
         element: <Dashboard />,
       },
       {
-        path: "/admin/form",
+        path: "/form",
         element: <Form />,
       },
       {
-        path: "/admin/photos",
+        path: "admin/photos",
         element: <Photos />,
       },
       {
-        path: "/admin/videos",
+        path: "admin/videos",
         element: <Videos />,
+      },
+      {
+        path: "admin/movies",
+        element: <Movie />,
       },
     ],
   },
@@ -65,10 +71,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <div className="App">
-      {/* Wrap the RouterProvider with both MovieContextProvider and AuthProvider */}
       <AuthProvider>
-        {" "}
-        {/* Add AuthProvider here */}
         <MovieContextProvider>
           <RouterProvider router={router} />
         </MovieContextProvider>

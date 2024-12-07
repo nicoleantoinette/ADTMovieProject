@@ -72,9 +72,9 @@ function Login() {
   const navigateAfterDelay = (role) => {
     setTimeout(() => {
       if (role === "admin") {
-        navigate("/main/dashboard");
+        navigate("/main/admin/dashboard");
       } else {
-        navigate("/home");
+        navigate("/main/home"); // Updated path to include /main
       }
       setStatus("idle");
     }, 3000);

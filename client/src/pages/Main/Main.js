@@ -4,6 +4,7 @@ import "./Main.css";
 
 function Main() {
   const accessToken = localStorage.getItem("accessToken");
+  const user = JSON.parse(localStorage.getItem("user")); // Expecting user object with a 'role' property
   const navigate = useNavigate();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
@@ -13,38 +14,44 @@ function Main() {
       setIsLoggingOut(true);
       setTimeout(() => {
         localStorage.removeItem("accessToken");
+        localStorage.removeItem("user");
         setIsLoggingOut(false);
         navigate("/login");
       }, 3000);
     }
   };
+
   useEffect(() => {
-    if (
-      accessToken === undefined ||
-      accessToken === "" ||
-      accessToken === null
-    ) {
-      handleLogout();
+    if (!accessToken) {
+      navigate("/login");
     }
-  }, []);
+  }, [accessToken, navigate]);
 
   return (
     <div className="main">
       <div className="container">
         <div className="navigation">
           <ul>
-            <li>
-              <a onClick={() => navigate("/")}>Movies</a>
-            </li>
-            {accessToken ? (
-              <li className="logout" onClick={handleLogout}>
-                Log Out
-              </li>
-            ) : (
-              <li className="login" onClick={() => navigate("/login")}>
-                Login
+            {user?.role === "user" && (
+              <li>
+                <a onClick={() => navigate("/home")}>Home</a>
               </li>
             )}
+
+            {user?.role === "admin" && (
+              <>
+                <li>
+                  <a onClick={() => navigate("admin/movies")}>Movies</a>
+                </li>
+                <li>
+                  <a onClick={() => navigate("admin/dashboard")}>Dashboard</a>{" "}
+                </li>
+              </>
+            )}
+
+            <li className="logout" onClick={handleLogout}>
+              Log Out
+            </li>
           </ul>
         </div>
 
