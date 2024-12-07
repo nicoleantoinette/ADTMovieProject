@@ -1,13 +1,13 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect } from "react";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({
-    accessToken: localStorage.getItem('accessToken') || null,
-    user: JSON.parse(localStorage.getItem('user')) || null,
+    accessToken: localStorage.getItem("accessToken") || null,
+    user: JSON.parse(localStorage.getItem("user")) || null,
   });
-
+  //
   const setAuthData = (data) => {
     setAuth({
       accessToken: data.accessToken,
@@ -16,13 +16,13 @@ export const AuthProvider = ({ children }) => {
 
     const role = data.user?.role;
 
-    if (role === 'admin') {
-      localStorage.setItem('tab', JSON.stringify('cast'));
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('user', JSON.stringify(data.user));
+    if (role === "admin") {
+      localStorage.setItem("tab", JSON.stringify("cast"));
+      localStorage.setItem("accessToken", data.accessToken);
+      localStorage.setItem("user", JSON.stringify(data.user));
     } else {
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem("accessToken", data.accessToken);
+      localStorage.setItem("user", JSON.stringify(data.user));
     }
   };
 
@@ -50,9 +50,9 @@ export const AuthProvider = ({ children }) => {
     setLists([]);
 
     // Remove from localStorage
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('user');
-    localStorage.removeItem('tab');
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("user");
+    localStorage.removeItem("tab");
   };
 
   useEffect(() => {
@@ -62,7 +62,19 @@ export const AuthProvider = ({ children }) => {
   }, [auth, movie]);
 
   return (
-    <AuthContext.Provider value={{ auth, setAuthData, clearAuthData, movie, setMovieInfo, lists, setListDataMovie, setLists, setMovie }}>
+    <AuthContext.Provider
+      value={{
+        auth,
+        setAuthData,
+        clearAuthData,
+        movie,
+        setMovieInfo,
+        lists,
+        setListDataMovie,
+        setLists,
+        setMovie,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
