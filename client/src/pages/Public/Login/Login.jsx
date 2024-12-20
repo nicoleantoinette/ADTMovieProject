@@ -1,6 +1,5 @@
-import { useState, useRef, useCallback, useContext, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../../context/AuthContext";
 import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useDebounce } from "../../../utils/hooks/useDebounce";
@@ -19,7 +18,6 @@ function Login() {
   const passwordInputRef = useRef();
 
   const navigate = useNavigate();
-  const { setAuthData } = useContext(AuthContext);
   const userInputDebounce = useDebounce({ email, password }, 2000);
 
   const handleShowPassword = useCallback(() => {
@@ -33,15 +31,11 @@ function Login() {
     else if (type === "password") setPassword(event.target.value);
   };
 
-  const apiEndpoint = window.location.pathname.includes("/admin")
-    ? "/admin/login"
-    : "/user/login";
-
   const handleLogin = async () => {
     const data = { email, password };
     setStatus("loading");
     try {
-      const res = await axios.post(apiEndpoint, data, {
+      const res = await axios.post("/user/login", data, {
         headers: { "Access-Control-Allow-Origin": "*" },
       });
       processLoginSuccess(res);
@@ -53,12 +47,8 @@ function Login() {
   const processLoginSuccess = (res) => {
     localStorage.setItem("accessToken", res.data.access_token);
     localStorage.setItem("user", JSON.stringify(res.data.user));
-    setAuthData({
-      accessToken: res.data.access_token,
-      user: res.data.user,
-    });
     setAlertMessage(res.data.message);
-    navigateAfterDelay(res.data.user.role);
+    navigateAfterDelay();
   };
 
   const processLoginError = (e) => {
@@ -69,13 +59,9 @@ function Login() {
     }, 3000);
   };
 
-  const navigateAfterDelay = (role) => {
+  const navigateAfterDelay = () => {
     setTimeout(() => {
-      if (role === "admin") {
-        navigate("/main/dashboard");
-      } else {
-        navigate("/main/home");
-      }
+      navigate("/main/home");
       setStatus("idle");
     }, 3000);
   };
