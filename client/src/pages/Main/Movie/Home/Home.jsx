@@ -65,7 +65,8 @@ const Home = () => {
             key={movie.id}
             movie={movie}
             onClick={() => {
-              navigate(`/view/${movie.id}`);
+              navigate(`/main/view/${movie.id}`);
+
               setMovie(movie);
             }}
           />

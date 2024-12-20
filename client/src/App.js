@@ -13,7 +13,6 @@ import Videos from "./pages/Main/Movie/Videos/Video-Form";
 import Dashboard from "./pages/Main/Dashboard/Dashboard";
 import Movies from "./pages/Main/Movie/Movie";
 import Movie from "./pages/Main/Movie/Movie";
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -39,17 +38,16 @@ const router = createBrowserRouter([
         path: "view/:movieId?",
         element: <View />,
       },
-
       {
-        path: "/list",
+        path: "list",
         element: <List />,
       },
       {
-        path: "/dashboard",
+        path: "dashboard", // For admin dashboard
         element: <Dashboard />,
       },
       {
-        path: "/form",
+        path: "form",
         element: <Form />,
       },
       {
@@ -57,11 +55,11 @@ const router = createBrowserRouter([
         element: <Photos />,
       },
       {
-        path: "admin/videos",
+        path: "videos",
         element: <Videos />,
       },
       {
-        path: "admin/movies",
+        path: "movies",
         element: <Movie />,
       },
     ],

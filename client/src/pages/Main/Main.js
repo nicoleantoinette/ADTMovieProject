@@ -34,17 +34,17 @@ function Main() {
           <ul>
             {user?.role === "user" && (
               <li>
-                <a onClick={() => navigate("/home")}>Home</a>
+                <a onClick={() => navigate("/main/home")}>Home</a>
               </li>
             )}
 
             {user?.role === "admin" && (
               <>
                 <li>
-                  <a onClick={() => navigate("admin/movies")}>Movies</a>
+                  <a onClick={() => navigate("/main/movies")}>Movies</a>
                 </li>
                 <li>
-                  <a onClick={() => navigate("admin/dashboard")}>Dashboard</a>{" "}
+                  <a onClick={() => navigate("/main/dashboard")}>Dashboard</a>
                 </li>
               </>
             )}
