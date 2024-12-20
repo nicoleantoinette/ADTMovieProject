@@ -1,0 +1,96 @@
+.lists-container {
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
+  overflow-x: auto;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.create-container {
+  margin: 20px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.create {
+  background-color: var(--primary-button-color);
+  color: white;
+  font-size: 1.2rem;
+  padding: var(--button-padding);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  border: none;
+  transition: background-color var(--animation-duration);
+}
+
+.create:hover {
+  background-color: #9c1a4a;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.movie-lists {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.movie-lists th,
+.movie-lists td {
+  padding: 10px;
+  text-align: left;
+}
+
+.movie-lists th {
+  background-color: var(--primary-button-color);
+}
+
+.movie-lists tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.id-cell,
+.title-cell {
+  font-size: 1.2rem;
+}
+
+.title-cell .movie-poster {
+  width: 40px;
+  height: 60px;
+  margin-right: 10px;
+}
+
+.action-cell {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  font-size: 1.2rem;
+  padding: 8px 12px;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all var(--animation-duration);
+}
+
+.edit {
+  background-color: transparent;
+  color: var(--primary-button-color);
+}
+
+.edit:hover {
+  color: #9c1a4a;
+}
+
+.delete {
+  background-color: transparent;
+  color: var(--error-color);
+}
+
+.delete:hover {
+  color: #ff1a1a;
+}
